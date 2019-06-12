@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<div class="d-flex justify-content-center">
+    <h1>Sound Visualizer</h1>
+</div>
+<br>
+<div class="d-flex justify-content-center">
+
+    <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+        <button type="button" class="btn btn-primary btn-lg" id="load-audio-btn">
+            Select Audio File
+        </button>
+        <input id="file-picker" type="file" style="display: none" name="file" accept=".mp3,audio/*">
+
+        <input value="Upload and analyze!" id="upload-button" class="btn btn-primary btn-lg" onclick="submit_clicked()">
+    </form>
+</div>
+<br><br>
+<div class="d-flex justify-content-center">
+    <div class="spinner-border" role="status" id="spinner" style="height: 150px; width: 150px; display: none">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+</body>
+<script>
+    function submit_clicked() {
+        document.getElementById("spinner").style.display = 'block';
+        document.getElementById('upload-button').disabled = true;
+        document.getElementById('load-audio-btn').disabled = true;
+        let form = document.getElementById("upload-form");
+        form.submit();
+    }
+
+    $(document).ready(function () {
+        $("#load-audio-btn").click(loadAudioClicked);
+    });
+
+    function loadAudioClicked() {
+        console.log("loadAudioClicked");
+        document.getElementById('file-picker').click();
+    }
+
+    $("#file-picker").change(function () {
+        var input = document.getElementById('file-picker');
+        for (var i = 0; i < input.files.length; i++) {
+            let ext = input.files[i].name.substring(input.files[i].name.lastIndexOf('.') + 1).toLowerCase();
+            if ((ext === 'wav') || (ext === 'mp3')) {
+                document.getElementById('upload-button').disabled = false;
+                document.getElementById('load-audio-btn').disabled = true;
+            } else {
+                document.getElementById('upload-button').disabled = true;
+                document.getElementById('load-audio-btn').disabled = false;
+            }
+        }
+    });
+</script>
+</html>
